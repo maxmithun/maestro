@@ -31,4 +31,8 @@ object Clean {
 
   def default: Clean =
     Clean((_, data) => data.trim.replaceAll("[^\\p{Print}]", ""))
+
+  // Allow users to apply cleaners on selected fields
+  def filterCleaner(conditionFn: String => Boolean, cleaner: Clean): Clean =
+    Clean((field, data) => if (conditionFn(field.name)) cleaner.run(field,data) else data)
 }
