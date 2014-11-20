@@ -17,10 +17,10 @@ package clean
 
 import au.com.cba.omnia.maestro.core.data._
 
-case class Clean(run: (Field[_, _], String) => String){
-  // Allow users to apply cleaners on selected fields
+case class Clean(run: (Field[_, _], String) => String) {
+  /** Allow users to apply cleaners on selected fields */
   def applyTo(conditionFn: Field[_, _] => Boolean): Clean =
-    Clean((field, data) => if (conditionFn(field)) run(field,data) else data)
+    Clean((field, data) => if (conditionFn(field)) run(field, data) else data)
 }
 
 object Clean {
