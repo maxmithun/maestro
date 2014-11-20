@@ -17,7 +17,11 @@ package clean
 
 import au.com.cba.omnia.maestro.core.data._
 
-case class Clean(run: (Field[_, _], String) => String)
+case class Clean(run: (Field[_, _], String) => String){
+  // Allow users to apply cleaners on selected fields
+  def applyTo(conditionFn: Field[_, _] => Boolean): Clean =
+    Clean((field, data) => if (conditionFn(field)) run(field,data) else data)
+}
 
 object Clean {
   def all(cleans: Clean*): Clean =
@@ -31,8 +35,4 @@ object Clean {
 
   def default: Clean =
     Clean((_, data) => data.trim.replaceAll("[^\\p{Print}]", ""))
-
-  // Allow users to apply cleaners on selected fields
-  def filterCleaner(conditionFn: String => Boolean, cleaner: Clean): Clean =
-    Clean((field, data) => if (conditionFn(field.name)) cleaner.run(field,data) else data)
 }
