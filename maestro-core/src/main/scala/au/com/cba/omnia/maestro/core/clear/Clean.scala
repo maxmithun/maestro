@@ -35,4 +35,8 @@ object Clean {
 
   def default: Clean =
     Clean((_, data) => data.trim.replaceAll("[^\\p{Print}]", ""))
+
+  /** Method refers to method on class */
+  def applyTo(conditionFn: Field[_, _] => Boolean, cleaner: Clean): Clean =
+    cleaner.applyTo(conditionFn)
 }
